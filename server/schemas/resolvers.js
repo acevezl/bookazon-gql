@@ -1,7 +1,6 @@
 const { User, Book } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
-const { Thought } = require('../../../deep-thoughts/server/models');
 
 const resolvers = {
     Query: {
@@ -21,7 +20,7 @@ const resolvers = {
 
         /* Get book by Id*/
         book: async ( parent, { _id }) => {
-            return Thought.findOne({ _id })
+            return Book.findOne({ _id })
         }
     },
     Mutation: {
@@ -49,6 +48,25 @@ const resolvers = {
             const token = signToken(user);
 
             return { token, user };
+        },
+
+        /* add book */
+        addBook: async ( parent, args, context ) => {
+            if (context.user) {
+                const book = await Book.create({ ...args, username: context.user.username });
+
+                await User.findByIdAndUpdate(
+                    { _id: context.user._id },
+                    { $push: { savedBooks: book._id } },
+                    { new: true }
+                );
+
+                return book;
+            }
+
+            throw new AuthenticationError('You need to be logged in!');
         }
     }
 }
+
+module.exports = resolvers;
