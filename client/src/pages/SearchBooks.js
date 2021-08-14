@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
-
-import { useMutation } from '@apollo/react-hooks';
 import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'react-bootstrap';
+
 import Auth from '../utils/auth';
-import { searchGoogleBooks } from '../utils/API';
+import { saveBook, searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
-import { ADD_BOOK } from '../utils/mutations';
 
 const SearchBooks = () => {
-
-  const [ saveBook ] = useMutation(ADD_BOOK)
   // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState([]);
   // create state for holding our search field data
@@ -97,11 +93,10 @@ const SearchBooks = () => {
                   type='text'
                   size='lg'
                   placeholder='Search for a book'
-                  className='mt-1'
                 />
               </Col>
               <Col xs={12} md={4}>
-                <Button type='submit' variant='primary' size='lg' className='mt-1'>
+                <Button type='submit' variant='success' size='lg'>
                   Submit Search
                 </Button>
               </Col>
