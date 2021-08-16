@@ -9,6 +9,16 @@ const typeDefs = gql`
     savedBooks: [bookSchema]
   }
 
+  type bookSchema {
+    _id: ID
+    bookId: String
+    title: String
+    authors: [String]
+    description: String
+    image: String
+    link: String
+  }
+
   type Auth {
     token: ID!
     user: User
