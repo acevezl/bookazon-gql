@@ -9,8 +9,8 @@ export const QUERY_ME = gql`
       savedBooks {
         _id
         bookId
-        title
         authors
+        title      
         description
         image
         link
@@ -19,12 +19,21 @@ export const QUERY_ME = gql`
   }
 `;
 
-export const QUERY_ME_BASIC = gql`
-  {
-    me {
+export const QUERY_USER = gql`
+  query user {
+    user {
       _id
       username
       email
+      savedBooks {
+        _id
+        bookId
+        authors
+        title      
+        description
+        image
+        link
+      }
     }
   }
 `;
