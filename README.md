@@ -4,7 +4,6 @@
 Refactpred a functioning Google books API search engine built with RESTful API into GraphQL API with Apollo Server. 
 
 See the app live here: https://dramasearch.herokuapp.com/
-(As of 8/15 There is a general Heroku error due to version incompatibility between GraphQL in my repo Vs. Heroku - unable to solve)
 
 ## Table of Contents
 - [MERN app with Google API](#mern-app-with-google-api)
