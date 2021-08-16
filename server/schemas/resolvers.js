@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Book } = require('../models');
+const { User } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -7,31 +7,17 @@ const resolvers = {
     me: async (parent, args, context) => {
       if (context.user) {
         const userData = await User.findOne({ _id: context.user._id })
-          .select('-__v -password')
-          .populate('savedBooks')
-
+        .select('-__v -password')
         return userData;
       }
-
       throw new AuthenticationError('Not logged in');
     },
-    users: async () => {
-      return User.find()
-        .select('-__v -password')
-        .populate('savedBooks')
-    },
-    user: async (parent, { username }) => {
-      return User.findOne({ username })
-        .select('-__v -password')
-        .populate('savedBooks')
-    },
-    savedBooks: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Book.find(params).sort({ createdAt: -1 });
-    },
-    book: async (parent, { _id }) => {
-      return Book.findOne({ _id });
-    }
+    user: async (parent, args, context) => {
+      console.log(context.user);
+      return User.findOne({ _id: context.user._id })
+        .select('-__v -password');
+      
+    }, 
   },
 
   Mutation: {
@@ -57,20 +43,33 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    addBook: async (parent, args, context) => {
+    addBook: async (parent, {bookId, authors, description, image, title, link}, context) => {
       if (context.user) {
-        const thought = await Book.create({ ...args, username: context.user.username });
-
-        await User.findByIdAndUpdate(
+        
+        const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $push: { bookss: book._id } },
-          { new: true }
+          { $addToSet: { savedBooks: {
+            bookId, authors, description, image, title, link
+          } } },
+          { new: true, runValidators: true }
         );
-
-        return thought;
+        console.log(updatedUser);
+        return updatedUser;
       }
 
       throw new AuthenticationError('You need to be logged in!');
+    },
+    removeBook: async (parent, {bookId}, context) => {
+      
+      if (context.user) {
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId } } },
+          { new: true, runValidators: true }
+        )
+        console.log(updatedUser);
+        return updatedUser;
+      }
     }
   }
 };
