@@ -19,6 +19,7 @@
     "mongoose": "^5.9.10"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "browserslist": "^4.16.5"
   }
 }
