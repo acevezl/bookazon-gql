@@ -51,7 +51,7 @@ const SearchBooks = () => {
         image: book.volumeInfo.imageLinks?.thumbnail || '',
         link: book.volumeInfo.infoLink || ''
       }));
-
+      console.log(bookData);
       setSearchedBooks(bookData);
       setSearchInput('');
     } catch (err) {
@@ -150,6 +150,7 @@ const SearchBooks = () => {
                         : 'Save this Book!'}
                     </Button>
                   )}
+                  <p className='small mt-1'><a className='btn btn-block btn-secondary' target="_blank" rel="noopener" href={book.link}>See on Play Store</a></p>
                 </Card.Body>
               </Card>
             );

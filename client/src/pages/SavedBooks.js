@@ -123,6 +123,7 @@ const SavedBooks = () => {
                       <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
                         Delete this Book!
                       </Button>
+                      <p className='small mt-1'><a className='btn btn-block btn-secondary' target="_blank" rel="noopener" href={book.link}>See on Play Store</a></p>
                     </Card.Body>
                   </Card>
                 );
